@@ -170,14 +170,14 @@ if ($Debug) {
 Write-Host "-- CRITICAL DRIVERS --" -ForegroundColor Cyan
 Write-Host ""
 
-# 1. Intel PPM (should stay enabled on updated BIOS)
+# 1. Intel PPM (no need to disable — PredatorGuard/ThrottleStop locks MSR)
 $intelppmKey = "HKLM:\SYSTEM\CurrentControlSet\Services\intelppm"
 $intelppmStart = (Get-ItemProperty $intelppmKey -Name Start -EA 0).Start
 
 if ($intelppmStart -eq 4) {
-    Write-Check "Intel PPM (intelppm)" "WARN" "DISABLED (Start=4) - legacy workaround, usually not needed"
+    Write-Check "Intel PPM (intelppm)" "WARN" "DISABLED (Start=4) - not needed, PredatorGuard/ThrottleStop locks MSR"
 } elseif ($intelppmStart -eq 3 -or $intelppmStart -eq 1) {
-    Write-Check "Intel PPM (intelppm)" "OK" "ACTIVE (Start=$intelppmStart) - expected on updated BIOS"
+    Write-Check "Intel PPM (intelppm)" "OK" "ACTIVE (Start=$intelppmStart) - PredatorGuard prevents conflicts"
 } else {
     Write-Check "Intel PPM (intelppm)" "WARN" "Start=$intelppmStart - unknown state"
 }
@@ -535,7 +535,7 @@ if ($ERR -gt 0) {
 
     # Specific checks
     if ($intelppmStart -eq 4) {
-        Write-Host "  - Re-enable Intel PPM unless you intentionally need the legacy workaround" -ForegroundColor White
+        Write-Host "  - Re-enable Intel PPM (not needed with PredatorGuard/ThrottleStop)" -ForegroundColor White
     }
 
     $gnaActive = Get-PnpDevice -FriendlyName "*GNA*","*Gaussian*" 2>$null | Where-Object { $_.Status -eq "OK" }

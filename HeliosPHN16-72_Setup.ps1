@@ -410,7 +410,7 @@ if ($intelppmStart -eq 4) {
     Write-Log "  [!] Intel PPM: DISABLED (Start=4) - legacy workaround, usually not needed now" "Yellow"
     $intelppmStatus = "DISABLED"
 } elseif ($intelppmStart -eq 3 -or $intelppmStart -eq 1) {
-    Write-Log "  [OK] Intel PPM: ACTIVE (Start=$intelppmStart) [expected on updated BIOS]" "Green"
+    Write-Log "  [OK] Intel PPM: ACTIVE (Start=$intelppmStart) [PredatorGuard prevents conflicts]" "Green"
     $intelppmStatus = "ENABLED"
 } else {
     Write-Log "  [?] Intel PPM: Start=$intelppmStart [unknown state]" "Yellow"
@@ -682,7 +682,7 @@ th{background:#333}
 <tr><td class="bad">Intel DPTF/DTT 11405+</td><td>dtt_sw.inf</td><td>Thermal crashes</td><td>Replace with Acer DPTF 11401</td></tr>
 <tr><td class="bad">Intel DPTF (APO)</td><td>-</td><td>Requires DTT 11405+</td><td>DO NOT install!</td></tr>
 <tr><td class="bad">Intel GNA</td><td>gna.inf</td><td>Various BSOD</td><td>Block</td></tr>
-<tr><td class="good">Intel PPM</td><td>intelppm.sys</td><td>Legacy CLOCK_WATCHDOG workaround</td><td>Keep enabled on updated BIOS</td></tr>
+<tr><td class="good">Intel PPM</td><td>intelppm.sys</td><td>CLOCK_WATCHDOG_TIMEOUT</td><td>No need to disable &mdash; PredatorGuard/ThrottleStop locks MSR</td></tr>
 </table>
 </div>
 
